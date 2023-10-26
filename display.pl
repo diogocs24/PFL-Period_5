@@ -1,21 +1,19 @@
-initialBoard([
-[empty,empty,empty,empty,empty],
-[empty,empty,empty,empty,empty],
-[empty,empty,empty,empty,empty],
-[empty,empty,empty,empty,empty],
-[empty,empty,empty,empty,empty]
+initial_board([
+[empty,o,empty,empty,empty],
+[x,empty,o,empty,empty],
+[empty,x,cube,o,empty],
+[empty,empty,x,empty,o],
+[empty,empty,empty,x,empty]
 ]).
 
-symbol(empty,S) :- S=' '.
-symbol(black,S) :- S='X'.
-symbol(white,S) :- S='O'.
-symbol(red,S) :- S='*'.
+info_piece(player1, 'X').
+info_piece(player2, 'O').
+info_piece(cube, '+').
 
-letter(1, L) :- L='A'.
-letter(2, L) :- L='B'.
-letter(3, L) :- L='C'.
-letter(4, L) :- L='D'.
-letter(5, L) :- L='E'.
+symbol(empty,X) :- X=' '.
+symbol(player1,X) :- X='X'.
+symbol(player2,X) :- X='O'.
+symbol(cube,X) :- X='+'.
 
 
 printBoard(X) :-
@@ -27,7 +25,6 @@ printBoard(X) :-
 printMatrix([], 6).
 
 printMatrix([Head|Tail], N) :-
-    letter(N, L),
     write(' '),
     write(L),
     N1 is N + 1,
