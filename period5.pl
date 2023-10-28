@@ -1,11 +1,10 @@
 :- consult('menu.pl').
-:- consult('display.pl').
+:- consult('content.pl').
+:- consult('display_board.pl').
 :- use_module(library(lists)).
 :- use_module(library(random)).
 
 period5 :-     
       firstMenu,
-      initial_board(Board),
-      printBoard(Board).
-      
+      print_board.
       
