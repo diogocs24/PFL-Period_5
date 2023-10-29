@@ -8,12 +8,16 @@ print_board :-
     initial_board(Board),
     length(Board, Size), % Obtém o tamanho do tabuleiro
     print_header(Size),
-    print_board_rows(Board, 1, Size).
+    display_rows(Board, 1, Size).
 
 % Predicado para imprimir o cabeçalho com números de coluna
 print_header(Size) :-
     display_header(1, Size),
     display_bar(Size).
+
+position(Board, Col-Row, Piece) :- 
+    nth1(Row, Board, Line),
+    nth1(Col, Line, Piece), !.
 
 get_symbol(Board, Line, Col, Symbol):-
     position(Board,Col-Line,Piece),
