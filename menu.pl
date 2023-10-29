@@ -1,32 +1,33 @@
+consult('auxiliar.pl').
+
 firstMenu :-
-    printFirstMenu.
-    % askMenuOption,
-    % read(Input),
-    % manageInput(Input).
+    printFirstMenu,
+    menuInput,
+    read_number(Input),
+    option(Input).
 
-% manageInput(1) :-
-%     startGame('P','P'),
-%     firstMenu.
+option(1) :-
+    startGame('P','P'),
+    firstMenu.
 
-% manageInput(2) :-
-%     startGame('P','C'),
-%     firstMenu.
+option(2) :-
+    startGame('P','C'),
+    firstMenu.
 
-% manageInput(3) :-
-%     startGame('C','C'),
-%     firstMenu.
+option(3) :-
+    startGame('C','C'),
+    firstMenu.
 
-% manageInput(4) :-
-%     write('valid option!\n\n').
+option(4) :-
+    write('\nQuitting...\n\n'),
+    abort.
 
-% manageInput(0) :-
-%     write('\nExiting...\n\n').
 
-% manageInput(_Other) :-
-%     write('\nERROR: that option does not exist.\n\n'),
-%     askMenuOption,
-%     read(Input),
-%     manageInput(Input).
+option(_Other) :-
+    write('\nInvalid Option. Try again:\n\n'),
+    menuInput,
+    read(Input),
+    option(Input).
 
 
 printFirstMenu :-
@@ -54,11 +55,11 @@ printFirstMenu :-
     write('|                                                                                  |'), nl,
     write('|                               3. Player vs Player                                |'), nl,
     write('|                                                                                  |'), nl,
-    write('|                               0. Exit                                            |'), nl,
+    write('|                               4. Quit                                            |'), nl,
     write('|                                                                                  |'), nl,
-    write('|__________________________________________________________________________________|'), nl.
+    write('|__________________________________________________________________________________|'), nl, nl, nl.
 
 
 
-% askMenuOption :-
-%     write('> Insert your option ').
+menuInput :-
+    write('Choose game mode: ').

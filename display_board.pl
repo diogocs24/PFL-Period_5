@@ -1,6 +1,7 @@
 :- use_module(library(lists)).
 % display_board.pl
 :- consult('content.pl').
+:- consult('auxiliar.pl').
 
 
 % Predicado para imprimir o tabuleiro
