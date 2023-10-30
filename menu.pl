@@ -1,4 +1,5 @@
 consult('auxiliar.pl').
+consult('game.pl').
 
 firstMenu :-
     printFirstMenu,
@@ -7,15 +8,15 @@ firstMenu :-
     option(Input).
 
 option(1) :-
-    startGame('P','P'),
+    game_init('P','P'),
     firstMenu.
 
 option(2) :-
-    startGame('P','C'),
+    game_init('P','C'),
     firstMenu.
 
 option(3) :-
-    startGame('C','C'),
+    game_init('C','C'),
     firstMenu.
 
 option(4) :-
