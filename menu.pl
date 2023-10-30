@@ -7,8 +7,8 @@ firstMenu :-
     read_number(Input),
     option(Input).
 
-option(1) :-
-    game_init('P','P'),
+option(1) :-   
+    game_init('C','C'),   
     firstMenu.
 
 option(2) :-
@@ -16,7 +16,11 @@ option(2) :-
     firstMenu.
 
 option(3) :-
-    game_init('C','C'),
+    write('Enter the name of Player 1: '),
+    read_cont(Player1Name, []),
+    write('Enter the name of Player 2: '),
+    read_cont(Player2Name, []),
+    game_init(Player1Name,Player2Name),
     firstMenu.
 
 option(4) :-
@@ -27,7 +31,7 @@ option(4) :-
 option(_Other) :-
     write('\nInvalid Option. Try again:\n\n'),
     menuInput,
-    read(Input),
+    read_number(Input),
     option(Input).
 
 
