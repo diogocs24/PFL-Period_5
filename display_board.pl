@@ -2,6 +2,7 @@
 % display_board.pl
 :- consult('content.pl').
 :- consult('auxiliar.pl').
+:- consult('game.pl').
 
 
 % Predicado para imprimir o tabuleiro
