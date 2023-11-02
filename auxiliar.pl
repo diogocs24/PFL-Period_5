@@ -22,17 +22,24 @@ player_name(Player):-
     read_cont(Name, []),
     asserta(name_of(Player, Name)).
 
-set_piece_aux([_H|T], 0, Piece, [Piece|T]).
-set_piece_aux([H|T], Index, Piece, [H|TNew]) :-
-    Index > 0,
-    IndexTemp is Index - 1,
-    set_piece_aux(T, IndexTemp, Piece, TNew).
+set_piece(Board, Col-Row, Piece, NewBoard) :-
+    set_element(Board, Row, Col, Piece, NewBoard).
 
-set_piece([H|T], Col-0, Piece, [HNew|T]) :-
-    set_piece_aux(H, Col, Piece, HNew).
+set_element([], _, _, _, []).
+set_element([Row|Rest], 1, Col, Piece, [NewRow|Rest]) :-
+    set_column(Row, Col, Piece, NewRow).
+set_element([Row|Rest], RowIndex, Col, Piece, [Row|NewRest]) :-
+    RowIndex > 1,
+    NextRowIndex is RowIndex - 1,
+    set_element(Rest, NextRowIndex, Col, Piece, NewRest).
 
-set_piece([H|T], Col-Row, Piece, [H|TNew]) :-
-    Row > 0,
-    RowTemp is Row - 1,
-    set_piece(T, Col-RowTemp, Piece, TNew).
+set_column([], _, _, []).
+set_column([_|Rest], 1, Piece, [Piece|Rest]).
+set_column([X|Rest], Col, Piece, [X|NewRest]) :-
+    Col > 1,
+    NextCol is Col - 1,
+    set_column(Rest, NextCol, Piece, NewRest).
+
+
+
 

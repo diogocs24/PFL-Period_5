@@ -86,5 +86,6 @@ make_move([Board,Player], Col1-Row1-Col2-Row2, [NewBoard,NewPlayer]) :-
 
 move_piece(Board, Col1-Row1-Col2-Row2, NewBoard) :-
     position(Board, Col1-Row1, Piece),
+    write('Moving piece '), write(Piece), write(' from '), write(Col1-Row1), write(' to '), write(Col2-Row2), nl,
     set_piece(Board, Col1-Row1, empty, TempBoard),
     set_piece(TempBoard, Col2-Row2, Piece, NewBoard).
