@@ -22,49 +22,37 @@ get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     write('Destination Row: '), read_number(Row2),
     write('Destination Column: '), read_number(Col2),
     (valid_move([Board,Player], Col1-Row1, Col2-Row2) ->
-        ! % Jogada válida, sai do loop repeat
+        !
     ; 
-        write('Invalid move. Please try again.') % Jogada inválida, exibe mensagem e continua o loop repeat
+        write('Invalid move. Please try again.'), nl, fail
     ).
 
 valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
     inside_board(Board, Col1-Row1),
     inside_board(Board, Col2-Row2),
     valid_origin([Board,Player], Col1-Row1), valid_destination(Board, Col1-Row1, Col2-Row2),
-    is_orthogonal(Col1-Row1, Col2-Row2).
+    is_orthogonal(Col1-Row1, Col2-Row2),
+    pieces_in_path(Board, Col1-Row1, Col2-Row2).
 
-pieces_in_path(_, _, _). 
+pieces_in_path(_, Col1-Row1, Col1-Row1).
 pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
-    are_equal(Col1, Col2), 
-    Row1 < Row2, 
-    Row1Next is Row1 + 1,
-    position(Board, Col1-Row1Next, Piece),
+    next_position(Col1-Row1, Col2-Row2, NextPos), 
+    position(Board, NextPos, Piece),
     info_piece(Piece, empty),
-    pieces_in_path(Board, Col1-Row1Next, Col2-Row2).
+    pieces_in_path(Board, NextPos, Col2-Row2).
 
-pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
-    are_equal(Col1, Col2),
-    Row1 > Row2, 
-    Row1Next is Row1 - 1,
-    position(Board, Col1-Row1Next, Piece),
-    info_piece(Piece, empty),
-    pieces_in_path(Board, Col1-Row1Next, Col2-Row2).
-
-pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
-    are_equal(Row1, Row2),
-    Col1 < Col2, 
-    Col1Next is Col1 + 1,
-    position(Board, Col1Next-Row1, Piece),
-    info_piece(Piece, empty),
-    pieces_in_path(Board, Col1Next-Row1, Col2-Row2).
-
-pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
-    are_equal(Row1, Row2),
-    Col1 > Col2, 
-    Col1Next is Col1 - 1,
-    position(Board, Col1Next-Row1, Piece),
-    info_piece(Piece, empty),
-    pieces_in_path(Board, Col1Next-Row1, Col2-Row2).
+next_position(Col1-Row1, Col2-Row2, Col1-NextRow) :- 
+    Row1 < Row2,
+    NextRow is Row1 + 1.
+next_position(Col1-Row1, Col2-Row2, Col1-NextRow) :- 
+    Row1 > Row2,
+    NextRow is Row1 - 1.
+next_position(Col1-Row1, Col2-Row2, NextCol-Row1) :- 
+    Col1 < Col2,
+    NextCol is Col1 + 1.
+next_position(Col1-Row1, Col2-Row2, NextCol-Row1) :- 
+    Col1 > Col2,
+    NextCol is Col1 - 1.
 
 inside_board(Board, Col-Row) :-
     length(Board, Size),
