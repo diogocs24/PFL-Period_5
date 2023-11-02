@@ -1,5 +1,7 @@
 :- dynamic name_of/2.
 
+:- dynamic difficulty/2.
+
 info_piece(playerX, x).
 info_piece(playerO, o).
 info_piece(cube, plus).
