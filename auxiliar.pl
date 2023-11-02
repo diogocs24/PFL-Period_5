@@ -21,3 +21,18 @@ read_cont(Result, Acc):-
 player_name(Player):-
     read_cont(Name, []),
     asserta(name_of(Player, Name)).
+
+set_piece_aux([_H|T], 0, Piece, [Piece|T]).
+set_piece_aux([H|T], Index, Piece, [H|TNew]) :-
+    Index > 0,
+    IndexTemp is Index - 1,
+    set_piece_aux(T, IndexTemp, Piece, TNew).
+
+set_piece([H|T], Col-0, Piece, [HNew|T]) :-
+    set_piece_aux(H, Col, Piece, HNew).
+
+set_piece([H|T], Col-Row, Piece, [H|TNew]) :-
+    Row > 0,
+    RowTemp is Row - 1,
+    set_piece(T, Col-RowTemp, Piece, TNew).
+
