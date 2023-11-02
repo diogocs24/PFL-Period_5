@@ -1,4 +1,6 @@
 :- dynamic last_move/2.
+:- use_module(library(random)).
+
 
 display_game([Board,_]) :-
     print_board(Board).
@@ -15,7 +17,7 @@ game_loop(GameState):-
 
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
-    name_of(Player, Name),
+    get_name(Player, Name),
     write('Player '), write(Name), write(', please enter your move: '), nl,
     write('Origin Row: '), read_number(Row1),
     write('Origin Column: '), read_number(Col1),

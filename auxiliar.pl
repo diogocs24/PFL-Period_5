@@ -1,6 +1,6 @@
 :- use_module(library(between)).
 
-% input without using dot (professor's code)
+% input without using dot (professors code)
 read_number(X):-
     read_number_aux(X,0).
 read_number_aux(X,Acc):- 
@@ -20,7 +20,7 @@ read_cont(Result, Acc):-
 
 player_name(Player):-
     read_cont(Name, []),
-    asserta(name_of(Player, Name)).
+    asserta(get_name(Player, Name)).
 
 set_piece(Board, Col-Row, Piece, NewBoard) :-
     set_element(Board, Row, Col, Piece, NewBoard).
