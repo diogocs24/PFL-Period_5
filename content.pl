@@ -1,18 +1,27 @@
 :- dynamic name_of/2.
 
-info_piece(playerX, 'X').
-info_piece(playerO, 'O').
-info_piece(cube, '+').
+info_piece(playerX, x).
+info_piece(playerO, o).
+info_piece(cube, plus).
+info_piece(empty, empty).
 
 symbol(empty,X) :- X=' '.
-symbol(playerX,X) :- X='X'.
-symbol(playerO,X) :- X='O'.
-symbol(cube,X) :- X='+'.
+symbol(x,X) :- X='X'.
+symbol(o,X) :- X='O'.
+symbol(plus,X) :- X='+'.
+
+is_orthogonal(_-Row,_-Row).
+is_orthogonal(Col-_,Col-_).
+
+are_equal(X, X).
+
+next_player(playerX, playerO).
+next_player(playerO, playerX).
 
 initial_board([
-    [empty,playerO,empty,empty,empty],
-    [playerX,empty,playerO,empty,empty],
-    [empty,playerX,cube,playerO,empty],
-    [empty,empty,playerX,empty,playerO],
-    [empty,empty,empty,playerX,empty]
+    [empty,o,empty,empty,empty],
+    [x,empty,o,empty,empty],
+    [empty,x,plus,o,empty],
+    [empty,empty,x,empty,o],
+    [empty,empty,empty,x,empty]
 ]).
