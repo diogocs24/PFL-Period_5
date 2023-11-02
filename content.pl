@@ -1,6 +1,6 @@
-:- dynamic name_of/2.
+:- dynamic get_name/2.
 
-:- dynamic difficulty/2.
+:- dynamic bot_diff/2.
 
 info_piece(playerX, x).
 info_piece(playerO, o).

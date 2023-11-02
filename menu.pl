@@ -10,7 +10,7 @@ firstMenu([Board, Player]) :-
     initial_board(Board).
 
 difficulty(Bot) :-
-    name_of(Bot, Name),
+    get_name(Bot, Name),
     write('Choose difficulty for '), write(Name), write(': '), nl,
     write('1. Random'), nl,
     write('2. Greedy'), nl,
@@ -23,11 +23,11 @@ difficulty(Bot) :-
 
 option_difficulty(1, Bot) :-
     write('Random'), nl,
-    asserta(difficulty(Bot, random)).
+    asserta(bot_diff(Bot, random)).
 
 option_difficulty(2, Bot) :-
     write('Greedy'), nl,
-    asserta(difficulty(Bot, greedy)).
+    asserta(bot_diff(Bot, greedy)).
 
 option(1) :-   
     write('Enter the name of Bot X (starts playing): '),
