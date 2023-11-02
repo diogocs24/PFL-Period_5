@@ -1,45 +1,37 @@
 :- dynamic last_move/2.
 
-game_init(Player1, Player2) :-
-    print_board,
-    game_loop(Player1, Player2, 1). %implementar o loop do jogo
+display_game([Board,_]) :-
+    print_board(Board).
 
-game_loop(Player1, Player2, Player) :-
-    get_move(Player, Move). % Obtém a jogada do jogador atual.
-    %apply_move(Board, Move, Player, NewBoard), % Aplica a jogada ao tabuleiro.
-    %check_winner(NewBoard, Player) -> % Verifica se o jogador atual venceu.
-    %       write('Player '), write(Player), write(' wins!\n')
-    %; 
-        % Alterna para o próximo jogador e continua o jogo.
-    %NextPlayer is 3 - Player, % Switch between players 1 and 2.
-    %    game_loop(Player1, Player2, NextPlayer).
-    
-% Combinações possiveis para ganhar um jogo
-%winning_combination()
-%check_winner(Board, Player) :- 
+% game_loop(GameState):-
+%     game_over(GameState, Winner), !,
+%     display_game(GameState),
+%     show_winner(GameState, Winner).
+game_loop(GameState):-
+    display_game(GameState),
+    get_move(GameState, Move),
+    make_move(GameState, Move, NewGameState), !,
+    game_loop(NewGameState).
 
-get_move(Player, Move) :-
+get_move([Board,Player], Row1-Col1-Row2-Col2) :-
     repeat,
-    write('Player '), write(Player), write(', please enter your move (e.g., "3,2"): '),
-    read(Move),
-    (valid_move(Player, Move) ->
+    name_of(Player, Name),
+    write('Player '), write(Name), write(', please enter your move: '), nl,
+    write('Origin Row: '), read_number(Row1),
+    write('Origin Column: '), read_number(Col1),
+    write('Destination Row: '), read_number(Row2),
+    write('Destination Column: '), read_number(Col2),
+    (valid_move([Board,Player], Row1-Col1, Row2-Col2) ->
         ! % Jogada válida, sai do loop repeat
     ; 
         writeln('Invalid move. Please try again.') % Jogada inválida, exibe mensagem e continua o loop repeat
     ).
 
-valid_move(Player, Move) :-
-    % verifica se a jogada é válida dentro do tabuleiro
-    Move = [Row, Col],
-    between(1, 5, Row),
-    between(1, 5, Col),
-    
-    % verifica se a jogada não é a mesma que anterior
-    \+ last_move(Player, Move),
-    
-    % Update the last move for the player.
-    retractall(last_move(Player, _)), % retira a ultima jogada do jogador 
-    assertz(last_move(Player, Move)). % adiciona a nova jogada do jogador
+valid_move([Board,Player], Row1-Col1, Row2-Col2) :-
+    valid_origin([Board,Player], Row1-Col1),
+    valid_destination([Board,Player], Row1-Col1, Row2-Col2).
 
-
-    
+valid_origin([Board,Player], Row-Col) :-
+    valid_position(Row-Col),
+    get_piece([Board,Player], Row-Col, Piece),
+    piece_of_player(Piece, Player).

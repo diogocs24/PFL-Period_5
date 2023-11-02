@@ -17,3 +17,7 @@ read_cont(Result, Acc):-
     read_cont(Result, Acc1).
 read_cont(Result, Acc):-
     atom_chars(Result, Acc).
+
+player_name(Player):-
+    read_cont(Name, []),
+    asserta(name_of(Player, Name)).

@@ -1,27 +1,25 @@
 consult('auxiliar.pl').
 consult('game.pl').
 
-firstMenu :-
+firstMenu([Board, Player]) :-
     printFirstMenu,
     menuInput,
     read_number(Input),
-    option(Input).
+    option(Input),
+    Player = playerX,
+    initial_board(Board).
 
 option(1) :-   
-    game_init('C','C'),   
-    firstMenu.
+    display_game('C','C').   
 
 option(2) :-
-    game_init('P','C'),
-    firstMenu.
+    display_game('P','C').
 
 option(3) :-
-    write('Enter the name of Player 1: '),
-    read_cont(Player1Name, []),
-    write('Enter the name of Player 2: '),
-    read_cont(Player2Name, []),
-    game_init(Player1Name,Player2Name),
-    firstMenu.
+    write('Enter the name of Player X (starts playing): '),
+    player_name(playerX),
+    write('Enter the name of Player O: '),
+    player_name(playerO).
 
 option(4) :-
     write('\nQuitting...\n\n'),

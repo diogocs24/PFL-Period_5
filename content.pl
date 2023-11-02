@@ -1,3 +1,5 @@
+:- dynamic name_of/2.
+
 info_piece(playerX, 'X').
 info_piece(playerO, 'O').
 info_piece(cube, '+').

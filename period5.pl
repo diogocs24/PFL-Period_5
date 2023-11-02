@@ -6,6 +6,8 @@
 :- use_module(library(lists)).
 :- use_module(library(random)).
 
-period5 :-     
-      firstMenu.
+play :-     
+      firstMenu(GameState), !,
+      game_loop(GameState).
+
       

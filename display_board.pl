@@ -6,8 +6,7 @@
 
 
 % Predicado para imprimir o tabuleiro
-print_board :-
-    initial_board(Board),
+print_board(Board) :-
     length(Board, Size), % Obtém o tamanho do tabuleiro
     print_header(Size),
     display_rows(Board, 1, Size).
