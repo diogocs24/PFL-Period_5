@@ -74,16 +74,16 @@ pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
     compare_piece(Piece, empty),
     pieces_in_path(Board, NextPos, Col2-Row2).
 
-next_position(Col1-Row1, Col2-Row2, Col1-NextRow) :- 
+next_position(Col1-Row1, _-Row2, Col1-NextRow) :- 
     Row1 < Row2,
     NextRow is Row1 + 1.
-next_position(Col1-Row1, Col2-Row2, Col1-NextRow) :- 
+next_position(Col1-Row1, _-Row2, Col1-NextRow) :- 
     Row1 > Row2,
     NextRow is Row1 - 1.
-next_position(Col1-Row1, Col2-Row2, NextCol-Row1) :- 
+next_position(Col1-Row1, Col2-_, NextCol-Row1) :- 
     Col1 < Col2,
     NextCol is Col1 + 1.
-next_position(Col1-Row1, Col2-Row2, NextCol-Row1) :- 
+next_position(Col1-Row1, Col2-_, NextCol-Row1) :- 
     Col1 > Col2,
     NextCol is Col1 - 1.
 
