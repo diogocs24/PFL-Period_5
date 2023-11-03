@@ -63,8 +63,8 @@ inside_board(Board, Col-Row) :-
 
 valid_origin([Board,Player], Col-Row) :-
     get_pos(Board, Col-Row, Piece),
-    \+pick_piece(Piece, empty),
-    pick_piece(Player, Piece).
+    \+pick_piece(empty, Piece),
+    (pick_piece(Player, Piece) ; pick_piece(cube,Piece)).
 
 valid_destination(Board, Col1-Row1, Col2-Row2) :-
     get_pos(Board, Col2-Row2, Piece),
