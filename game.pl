@@ -3,8 +3,9 @@
 
 
 display_game([Board,_]) :-
+    length(Board, Size),
     print_board(Board),
-    colors_positions(Colors),
+    colors_positions(Size, Colors),
     print_board(Colors).
 
 game_win_condition([Board,Player],Player) :-
@@ -17,7 +18,7 @@ pieces_in_all_colors([Board,Player]) :-
     has_piece_in_each_color(Positions, Size).
 
 has_piece_in_each_color(Positions, Size) :-
-    colors_positions(Colors),
+    colors_positions(Size, Colors),
     findall(Color, (
         member(Col-Row, Positions), % get player all pieces positions
         nth1(Row, Colors, ColorRow), % get color row with player pieces positions row

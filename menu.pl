@@ -3,8 +3,16 @@ firstMenu([Board, playerX]) :-
     menuInput,
     read_number(Input),
     option(Input),
-    initialize_cube_position,
-    initial_board(Board).
+    boardInput,   
+    read_number(BoardInput),
+    initialize_cube_position(Board),
+    initial_board(BoardInput, Board).
+
+boardInput :-
+    write('\nChoose board: \n'),
+    write('1. 5x5\n'),
+    write('2. 7x7\n'),
+    write('3. 9x9\n').
 
 difficulty(Bot) :-
     get_name(Bot, Name),
