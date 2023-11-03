@@ -2,6 +2,8 @@
 
 :- dynamic bot_diff/2.
 
+:- dynamic cube_position/2.
+
 compare_piece(playerX, x).
 compare_piece(playerO, o).
 compare_piece(cube, plus).

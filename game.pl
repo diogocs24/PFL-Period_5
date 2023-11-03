@@ -34,7 +34,20 @@ valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
     inside_board(Board, Col2-Row2),
     valid_origin([Board,Player], Col1-Row1), valid_destination(Board, Col1-Row1, Col2-Row2),
     is_orthogonal(Col1-Row1, Col2-Row2),
-    pieces_in_path(Board, Col1-Row1, Col2-Row2).
+    pieces_in_path(Board, Col1-Row1, Col2-Row2),
+    pick_piece(Board, Col1-Row1, Piece),
+    (compare_piece(cube, Piece) ->
+        is_cube_move_valid(Col1-Row1, Col2-Row2)
+    ;
+        true
+    ).
+
+is_cube_move_valid(Col1-Row1, Col2-Row2) :-
+    cube_position(Col,Row),
+    (Col-Row =\= Col2-Row2 -> 
+        true;
+        fail
+    ).
 
 pieces_in_path(_, Col1-Row1, Col1-Row1).
 pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
@@ -76,5 +89,12 @@ make_move([Board,Player], Col1-Row1-Col2-Row2, [NewBoard,NewPlayer]) :-
 
 move_piece(Board, Col1-Row1-Col2-Row2, NewBoard) :-
     pick_piece(Board, Col1-Row1, Piece),
+    (compare_piece(cube, Piece) ->
+        cube_position(Col,Row),
+        retract(cube_position(Col,Row)),
+        asserta(cube_position(Col1,Row1))
+    ;
+        true
+    ),
     set_piece(Board, Col1-Row1, empty, TempBoard),
     set_piece(TempBoard, Col2-Row2, Piece, NewBoard).
