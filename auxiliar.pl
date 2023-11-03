@@ -49,6 +49,6 @@ get_player_pieces_positions([Board, Player], Positions) :-
 
 winner_message(Player) :-
     get_name(Player, Name),
-    write('========================================'), nl,
+    write('****************************************'), nl,
     write('Congratulations '), write(Name), write('! You won!'), nl,
-    write('========================================'), nl.
+    write('****************************************'), nl.

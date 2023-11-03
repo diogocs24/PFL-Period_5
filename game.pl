@@ -3,11 +3,29 @@
 
 
 display_game([Board,_]) :-
-    print_board(Board).
+    print_board(Board),
+    colors_positions(Colors),
+    print_board(Colors).
 
 game_win_condition([Board,Player],Player) :-
-    pieces_in_all_columns([Board,Player]).
-    % pieces_in_all_colors([Board,Player]).
+    pieces_in_all_columns([Board,Player]),
+    pieces_in_all_colors([Board,Player]).
+
+pieces_in_all_colors([Board,Player]) :-
+    length(Board, Size),
+    get_player_pieces_positions([Board,Player], Positions),
+    has_piece_in_each_color(Positions, Size).
+
+has_piece_in_each_color(Positions, Size) :-
+    colors_positions(Colors),
+    findall(Color, (
+        member(Col-Row, Positions), % get player all pieces positions
+        nth1(Row, Colors, ColorRow), % get color row with player pieces positions row
+        nth1(Col, ColorRow, Color) % get color from color row with player pieces positions column
+    ), PlayerColors),
+    sort(PlayerColors, UniqueColors), % remove duplicates
+    length(UniqueColors, NumColors),
+    NumColors =:= 5.
 
 pieces_in_all_columns([Board,Player]) :-
     length(Board, Size),
@@ -36,7 +54,7 @@ game_loop(GameState):-
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
     get_name(Player, Name),
-    write('Player '), write(Name), write(', please enter your move: '), nl,
+    write(Name), write(', please enter your move: '), nl,
     write('Origin Row: '), read_number(Row1),
     write('Origin Column: '), read_number(Col1),
     write('Destination Row: '), read_number(Row2),

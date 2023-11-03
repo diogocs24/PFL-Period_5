@@ -14,6 +14,12 @@ symbol(x,X) :- X='X'.
 symbol(o,X) :- X='O'.
 symbol(plus,X) :- X='+'.
 
+symbol(white,X) :- X='W'.
+symbol(black,X) :- X='B'.
+symbol(red,X) :- X='R'.
+symbol(green,X) :- X='G'.
+symbol(purple,X) :- X='P'.
+
 is_orthogonal(_-Row,_-Row).
 is_orthogonal(Col-_,Col-_).
 
@@ -29,3 +35,12 @@ initial_board([
     [empty,empty,x,empty,o],
     [empty,empty,empty,x,empty]
 ]).
+
+colors_positions([
+    [red, white, purple, black, green],
+    [green,red, white, purple, black],
+    [black, green, red, white, purple],
+    [purple, black, green, red, white],
+    [white, purple, black, green, red]
+]).
+
