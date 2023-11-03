@@ -5,15 +5,33 @@
 display_game([Board,_]) :-
     print_board(Board).
 
-% game_loop(GameState):-
-%     game_over(GameState, Winner), !,
-%     display_game(GameState),
-%     show_winner(GameState, Winner).
+game_win_condition([Board,Player],Player) :-
+    pieces_in_all_columns([Board,Player]).
+    % pieces_in_all_colors([Board,Player]).
+
+pieces_in_all_columns([Board,Player]) :-
+    length(Board, Size),
+    between(1, Size, Col),
+    get_player_pieces_positions([Board,Player], Positions),
+    has_piece_in_each_column(Positions, Size).
+
+has_piece_in_each_column(Positions, Size) :-
+    findall(Col, (member(Col-_, Positions)), Columns),
+    sort(Columns, SortedColumns),
+    length(SortedColumns, N),
+    N =:= Size.
+    
 game_loop(GameState):-
     display_game(GameState),
     get_move(GameState, Move),
-    make_move(GameState, Move, NewGameState), !,
-    game_loop(NewGameState).
+    make_move(GameState, Move, [Board,Player]), !,
+    next_player(Player, NextPlayer),
+    (game_win_condition([Board, Player], Winner) ->
+        display_game([Board, Player]),
+        winner_message(Winner)
+    ;
+        game_loop([Board, NextPlayer])
+    ).
 
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
@@ -83,9 +101,8 @@ valid_destination(Board, Col1-Row1, Col2-Row2) :-
     pick_piece(Board, Col2-Row2, Piece),
     compare_piece(Piece, empty).
 
-make_move([Board,Player], Col1-Row1-Col2-Row2, [NewBoard,NewPlayer]) :-
-    move_piece(Board, Col1-Row1-Col2-Row2, NewBoard),
-    next_player(Player, NewPlayer).
+make_move([Board,Player], Col1-Row1-Col2-Row2, [NewBoard,Player]) :-
+    move_piece(Board, Col1-Row1-Col2-Row2, NewBoard).
 
 move_piece(Board, Col1-Row1-Col2-Row2, NewBoard) :-
     pick_piece(Board, Col1-Row1, Piece),
