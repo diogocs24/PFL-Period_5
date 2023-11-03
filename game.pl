@@ -39,8 +39,8 @@ valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
 pieces_in_path(_, Col1-Row1, Col1-Row1).
 pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
     next_position(Col1-Row1, Col2-Row2, NextPos), 
-    get_pos(Board, NextPos, Piece),
-    pick_piece(Piece, empty),
+    pick_piece(Board, NextPos, Piece),
+    compare_piece(Piece, empty),
     pieces_in_path(Board, NextPos, Col2-Row2).
 
 next_position(Col1-Row1, Col2-Row2, Col1-NextRow) :- 
@@ -62,19 +62,19 @@ inside_board(Board, Col-Row) :-
     between(1, Size, Row).
 
 valid_origin([Board,Player], Col-Row) :-
-    get_pos(Board, Col-Row, Piece),
-    \+pick_piece(empty, Piece),
-    (pick_piece(Player, Piece) ; pick_piece(cube,Piece)).
+    pick_piece(Board, Col-Row, Piece),
+    \+compare_piece(empty, Piece),
+    (compare_piece(Player, Piece) ; compare_piece(cube,Piece)).
 
 valid_destination(Board, Col1-Row1, Col2-Row2) :-
-    get_pos(Board, Col2-Row2, Piece),
-    pick_piece(Piece, empty).
+    pick_piece(Board, Col2-Row2, Piece),
+    compare_piece(Piece, empty).
 
 make_move([Board,Player], Col1-Row1-Col2-Row2, [NewBoard,NewPlayer]) :-
     move_piece(Board, Col1-Row1-Col2-Row2, NewBoard),
     next_player(Player, NewPlayer).
 
 move_piece(Board, Col1-Row1-Col2-Row2, NewBoard) :-
-    get_pos(Board, Col1-Row1, Piece),
+    pick_piece(Board, Col1-Row1, Piece),
     set_piece(Board, Col1-Row1, empty, TempBoard),
     set_piece(TempBoard, Col2-Row2, Piece, NewBoard).

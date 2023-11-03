@@ -2,10 +2,10 @@
 
 :- dynamic bot_diff/2.
 
-pick_piece(playerX, x).
-pick_piece(playerO, o).
-pick_piece(cube, plus).
-pick_piece(empty, empty).
+compare_piece(playerX, x).
+compare_piece(playerO, o).
+compare_piece(cube, plus).
+compare_piece(empty, empty).
 
 symbol(empty,X) :- X=' '.
 symbol(x,X) :- X='X'.
