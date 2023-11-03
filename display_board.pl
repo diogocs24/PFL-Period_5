@@ -16,12 +16,12 @@ print_header(Size) :-
     display_header(1, Size),
     display_bar(Size).
 
-position(Board, Col-Row, Piece) :- 
+pick_piece(Board, Col-Row, Piece) :- 
     nth1(Row, Board, Line),
     nth1(Col, Line, Piece), !.
 
 get_symbol(Board, Line, Col, Symbol):-
-    position(Board,Col-Line,Piece),
+    pick_piece(Board,Col-Line,Piece),
     symbol(Piece, Symbol).
 
 display_pieces(_, _, Col, Size):- 

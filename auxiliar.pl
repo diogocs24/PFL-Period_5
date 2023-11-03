@@ -40,6 +40,7 @@ set_column([X|Rest], Col, Piece, [X|NewRest]) :-
     NextCol is Col - 1,
     set_column(Rest, NextCol, Piece, NewRest).
 
-
+initialize_cube_position :-
+    assert(cube_position(3,3)). 
 
 

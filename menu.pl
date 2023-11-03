@@ -1,12 +1,9 @@
-consult('auxiliar.pl').
-consult('game.pl').
-
-firstMenu([Board, Player]) :-
+firstMenu([Board, playerX]) :-
     printFirstMenu,
     menuInput,
     read_number(Input),
     option(Input),
-    Player = playerX,
+    initialize_cube_position,
     initial_board(Board).
 
 difficulty(Bot) :-
