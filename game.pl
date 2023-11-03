@@ -26,11 +26,10 @@ has_piece_in_each_color(Positions, Size) :-
     ), PlayerColors),
     sort(PlayerColors, UniqueColors), % remove duplicates
     length(UniqueColors, NumColors),
-    NumColors =:= 5.
+    NumColors =:= Size.
 
 pieces_in_all_columns([Board,Player]) :-
     length(Board, Size),
-    between(1, Size, Col),
     get_player_pieces_positions([Board,Player], Positions),
     has_piece_in_each_column(Positions, Size).
 
@@ -69,17 +68,17 @@ get_move([Board,Player], Col1-Row1-Col2-Row2) :-
 valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
     inside_board(Board, Col1-Row1),
     inside_board(Board, Col2-Row2),
-    valid_origin([Board,Player], Col1-Row1), valid_destination(Board, Col1-Row1, Col2-Row2),
+    valid_origin([Board,Player], Col1-Row1), valid_destination(Board, Col2-Row2),
     is_orthogonal(Col1-Row1, Col2-Row2),
     pieces_in_path(Board, Col1-Row1, Col2-Row2),
     pick_piece(Board, Col1-Row1, Piece),
     (compare_piece(cube, Piece) ->
-        is_cube_move_valid(Col1-Row1, Col2-Row2)
+        is_cube_move_valid(Col2-Row2)
     ;
         true
     ).
 
-is_cube_move_valid(Col1-Row1, Col2-Row2) :-
+is_cube_move_valid(Col2-Row2) :-
     cube_position(Col,Row),
     (Col-Row =\= Col2-Row2 -> 
         true;
@@ -116,7 +115,7 @@ valid_origin([Board,Player], Col-Row) :-
     \+compare_piece(empty, Piece),
     (compare_piece(Player, Piece) ; compare_piece(cube,Piece)).
 
-valid_destination(Board, Col1-Row1, Col2-Row2) :-
+valid_destination(Board, Col2-Row2) :-
     pick_piece(Board, Col2-Row2, Piece),
     compare_piece(Piece, empty).
 
