@@ -32,7 +32,6 @@ are_equal(X, X).
 next_player(playerX, playerO).
 next_player(playerO, playerX).
 
-% Board 5x5
 init_state(5, [[
     [empty,o,empty,empty,empty],
     [x,empty,o,empty,empty],
@@ -41,15 +40,6 @@ init_state(5, [[
     [empty,empty,empty,x,empty]
 ],playerX]).
 
-colors_positions(5, [
-    [red, white, purple, black, green],
-    [green,red, white, purple, black],
-    [black, green, red, white, purple],
-    [purple, black, green, red, white],
-    [white, purple, black, green, red]
-]).
-
-% Board 7x7
 init_state(7, [[
     [empty,o,empty,empty,empty,empty,empty],
     [x,empty,o,empty,empty,empty,empty],
@@ -60,17 +50,6 @@ init_state(7, [[
     [empty,empty,empty,empty,empty,x,empty]
 ],playerX]).
 
-colors_positions(7, [
-    [red, yellow, violet, orange, cyan, white, purple],
-    [purple, red, yellow, violet, orange, cyan, white],
-    [white, purple, red, yellow, violet, orange, cyan],
-    [cyan, white, purple, red, yellow, violet, orange],
-    [orange, cyan, white, purple, red, yellow, violet],
-    [violet, orange, cyan, white, purple, red, yellow],
-    [yellow, violet, orange, cyan, white, purple, red]
-]).
-
-% Board 9x9
 init_state(9, [[
     [empty,o,empty,empty,empty,empty,empty,empty,empty],
     [x,empty,o,empty,empty,empty,empty,empty,empty],
@@ -82,6 +61,24 @@ init_state(9, [[
     [empty,empty,empty,empty,empty,empty,x,empty,o],
     [empty,empty,empty,empty,empty,empty,empty,x,empty]
 ],playerX]).
+
+colors_positions(5, [
+    [red, white, purple, black, green],
+    [green,red, white, purple, black],
+    [black, green, red, white, purple],
+    [purple, black, green, red, white],
+    [white, purple, black, green, red]
+]).
+
+colors_positions(7, [
+    [red, yellow, violet, orange, cyan, white, purple],
+    [purple, red, yellow, violet, orange, cyan, white],
+    [white, purple, red, yellow, violet, orange, cyan],
+    [cyan, white, purple, red, yellow, violet, orange],
+    [orange, cyan, white, purple, red, yellow, violet],
+    [violet, orange, cyan, white, purple, red, yellow],
+    [yellow, violet, orange, cyan, white, purple, red]
+]).
 
 colors_positions(9, [
     [red, yellow, violet, orange, cyan, white, purple, black, green],
