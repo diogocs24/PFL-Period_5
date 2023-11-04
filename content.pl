@@ -33,13 +33,13 @@ next_player(playerX, playerO).
 next_player(playerO, playerX).
 
 % Board 5x5
-initial_board(1, [
+init_state(5, [[
     [empty,o,empty,empty,empty],
     [x,empty,o,empty,empty],
     [empty,x,plus,o,empty],
     [empty,empty,x,empty,o],
     [empty,empty,empty,x,empty]
-]).
+],playerX]).
 
 colors_positions(5, [
     [red, white, purple, black, green],
@@ -50,7 +50,7 @@ colors_positions(5, [
 ]).
 
 % Board 7x7
-initial_board(2, [
+init_state(7, [[
     [empty,o,empty,empty,empty,empty,empty],
     [x,empty,o,empty,empty,empty,empty],
     [empty,x,empty,o,empty,empty,empty],
@@ -58,7 +58,7 @@ initial_board(2, [
     [empty,empty,empty,x,empty,o,empty],
     [empty,empty,empty,empty,x,empty,o],
     [empty,empty,empty,empty,empty,x,empty]
-]).
+],playerX]).
 
 colors_positions(7, [
     [red, yellow, violet, orange, cyan, white, purple],
@@ -71,7 +71,7 @@ colors_positions(7, [
 ]).
 
 % Board 9x9
-initial_board(3, [
+init_state(9, [[
     [empty,o,empty,empty,empty,empty,empty,empty,empty],
     [x,empty,o,empty,empty,empty,empty,empty,empty],
     [empty,x,empty,o,empty,empty,empty,empty,empty],
@@ -81,7 +81,7 @@ initial_board(3, [
     [empty,empty,empty,empty,empty,x,empty,o,empty],
     [empty,empty,empty,empty,empty,empty,x,empty,o],
     [empty,empty,empty,empty,empty,empty,empty,x,empty]
-]).
+],playerX]).
 
 colors_positions(9, [
     [red, yellow, violet, orange, cyan, white, purple, black, green],

@@ -4,11 +4,12 @@
 
 display_game([Board,_]) :-
     length(Board, Size),
+    initialize_cube_position(Board),
     print_board(Board),
     colors_positions(Size, Colors),
     print_board(Colors).
 
-game_win_condition([Board,Player],Player) :-
+game_over([Board,Player],Player) :-
     pieces_in_all_columns([Board,Player]),
     pieces_in_all_colors([Board,Player]).
 
@@ -39,11 +40,6 @@ has_piece_in_each_column(Positions, Size) :-
     length(SortedColumns, N),
     N =:= Size.
 
-pieces_in_all_colors_aux([Board,Player]) :-
-    length(Board, Size),
-    get_player_pieces_positions([Board,Player], Positions),
-    has_piece_in_each_color(Positions, Size).
-
 has_piece_in_each_color_aux(Positions, Size) :-
     colors_positions(Size, Colors),
     findall(Color, (
@@ -54,11 +50,6 @@ has_piece_in_each_color_aux(Positions, Size) :-
     sort(PlayerColors, UniqueColors), % remove duplicates
     length(UniqueColors, NumColors),
     NumColors =:= Size - 1.
-
-pieces_in_all_columns_aux([Board,Player]) :-
-    length(Board, Size),
-    get_player_pieces_positions([Board,Player], Positions),
-    has_piece_in_each_column(Positions, Size).
 
 has_piece_in_each_column_aux(Positions, Size) :-
     findall(Col, (member(Col-_, Positions)), Columns),
@@ -71,7 +62,7 @@ game_loop(GameState):-
     get_move(GameState, Move),
     make_move(GameState, Move, [Board,Player]), !,
     next_player(Player, NextPlayer),
-    (game_win_condition([Board, Player], Winner) ->
+    (game_over([Board, Player], Winner) ->
         display_game([Board, Player]),
         winner_message(Winner)
     ;

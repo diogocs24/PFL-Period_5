@@ -1,12 +1,21 @@
-firstMenu([Board, playerX]) :-
+firstMenu(GameState) :-
     printFirstMenu,
     menuInput,
     read_number(Input),
     option(Input),
     boardInput,   
     read_number(BoardInput),
-    initialize_cube_position(Board),
-    initial_board(BoardInput, Board).
+    board(BoardInput, Size),
+    init_state(Size, GameState).
+
+board(1, Size) :-
+    Size is 5.
+
+board(2, Size) :-
+    Size is 7.
+
+board(3, Size) :-
+    Size is 9.
 
 boardInput :-
     write('\nChoose board: \n'),
