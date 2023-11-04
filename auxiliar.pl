@@ -49,6 +49,10 @@ get_player_pieces_positions([Board, Player], Positions) :-
     length(Board, N),
     findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), (compare_piece(Player,Piece) ; compare_piece(cube,Piece)))), Positions).
 
+get_player_pieces_positions_without_cube([Board, Player], Positions) :-
+    length(Board, N),
+    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), compare_piece(Player,Piece))), Positions).
+
 winner_message(Player) :-
     get_name(Player, Name),
     write('****************************************'), nl,

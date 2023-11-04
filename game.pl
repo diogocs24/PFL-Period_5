@@ -38,7 +38,34 @@ has_piece_in_each_column(Positions, Size) :-
     sort(Columns, SortedColumns),
     length(SortedColumns, N),
     N =:= Size.
-    
+
+pieces_in_all_colors_aux([Board,Player]) :-
+    length(Board, Size),
+    get_player_pieces_positions([Board,Player], Positions),
+    has_piece_in_each_color(Positions, Size).
+
+has_piece_in_each_color_aux(Positions, Size) :-
+    colors_positions(Size, Colors),
+    findall(Color, (
+        member(Col-Row, Positions), % get player all pieces positions
+        nth1(Row, Colors, ColorRow), % get color row with player pieces positions row
+        nth1(Col, ColorRow, Color) % get color from color row with player pieces positions column
+    ), PlayerColors),
+    sort(PlayerColors, UniqueColors), % remove duplicates
+    length(UniqueColors, NumColors),
+    NumColors =:= Size - 1.
+
+pieces_in_all_columns_aux([Board,Player]) :-
+    length(Board, Size),
+    get_player_pieces_positions([Board,Player], Positions),
+    has_piece_in_each_column(Positions, Size).
+
+has_piece_in_each_column_aux(Positions, Size) :-
+    findall(Col, (member(Col-_, Positions)), Columns),
+    sort(Columns, SortedColumns),
+    length(SortedColumns, N),
+    N =:= Size - 1.
+
 game_loop(GameState):-
     display_game(GameState),
     get_move(GameState, Move),
@@ -73,17 +100,29 @@ valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
     pieces_in_path(Board, Col1-Row1, Col2-Row2),
     pick_piece(Board, Col1-Row1, Piece),
     (compare_piece(cube, Piece) ->
-        is_cube_move_valid(Col2-Row2)
+        is_cube_move_valid([Board, Player], Col2-Row2)
     ;
         true
     ).
 
-is_cube_move_valid(Col2-Row2) :-
+is_cube_move_valid([Board, Player], Col2-Row2) :-
+    (is_other_player_gonna_win([Board, Player]) ->
+        fail;
+        true
+    ),
     cube_position(Col,Row),
     (Col-Row =\= Col2-Row2 -> 
         true;
         fail
     ).
+
+is_other_player_gonna_win([Board, Player]) :-
+    length(Board, Size),
+    next_player(Player, OtherPlayer),
+    get_player_pieces_positions_without_cube([Board,OtherPlayer], Positions),
+    has_piece_in_each_color_aux(Positions, Size),
+    has_piece_in_each_column_aux(Positions, Size),
+    other_player_can_move_cube_to_win([Board, OtherPlayer]).
 
 pieces_in_path(_, Col1-Row1, Col1-Row1).
 pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
