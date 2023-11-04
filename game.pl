@@ -121,8 +121,7 @@ is_other_player_gonna_win([Board, Player]) :-
     next_player(Player, OtherPlayer),
     get_player_pieces_positions_without_cube([Board,OtherPlayer], Positions),
     has_piece_in_each_color_aux(Positions, Size),
-    has_piece_in_each_column_aux(Positions, Size),
-    other_player_can_move_cube_to_win([Board, OtherPlayer]).
+    has_piece_in_each_column_aux(Positions, Size).
 
 pieces_in_path(_, Col1-Row1, Col1-Row1).
 pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
