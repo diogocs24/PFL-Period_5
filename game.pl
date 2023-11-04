@@ -100,8 +100,9 @@ is_cube_move_valid([Board, Player], Col2-Row2) :-
         true
     ),
     cube_position(Col,Row),
-    (Col-Row =\= Col2-Row2 -> 
-        true;
+    ((Col =\= Col2 , Row =\= Row2) ->
+        true
+    ;
         fail
     ).
 
@@ -156,6 +157,9 @@ move_piece(Board, Col1-Row1-Col2-Row2, NewBoard) :-
         retract(cube_position(Col,Row)),
         asserta(cube_position(Col1,Row1))
     ;
+        cube_position(Col,Row),
+        retract(cube_position(Col,Row)),
+        asserta(cube_position(-1,-1)),
         true
     ),
     set_piece(Board, Col1-Row1, empty, TempBoard),
