@@ -3,7 +3,6 @@
 
 display_game([Board,_]) :-
     length(Board, Size),
-    initialize_cube_position(Board),
     print_board(Board),
     colors_positions(Size, Colors),
     print_board(Colors).

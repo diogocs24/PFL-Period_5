@@ -6,6 +6,7 @@ firstMenu(GameState) :-
     boardInput,   
     read_number(BoardInput),
     board(BoardInput, Size),
+    initialize_cube_position(Size),
     init_state(Size, GameState).
 
 board(1, Size) :-

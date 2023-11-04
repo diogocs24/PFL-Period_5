@@ -40,8 +40,7 @@ set_column([X|Rest], Col, Piece, [X|NewRest]) :-
     NextCol is Col - 1,
     set_column(Rest, NextCol, Piece, NewRest).
 
-initialize_cube_position(Board) :-
-    length(Board, N),
+initialize_cube_position(N) :-
     Pos is N div 2 + 1,
     assert(cube_position(Pos,Pos)). 
 
