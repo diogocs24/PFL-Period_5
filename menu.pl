@@ -1,10 +1,28 @@
-firstMenu([Board, playerX]) :-
+firstMenu(GameState) :-
     printFirstMenu,
     menuInput,
     read_number(Input),
     option(Input),
-    initialize_cube_position,
-    initial_board(Board).
+    boardInput,   
+    read_number(BoardInput),
+    board(BoardInput, Size),
+    initialize_cube_position(Size),
+    init_state(Size, GameState).
+
+board(1, Size) :-
+    Size is 5.
+
+board(2, Size) :-
+    Size is 7.
+
+board(3, Size) :-
+    Size is 9.
+
+boardInput :-
+    write('\nChoose board: \n'),
+    write('1. 5x5\n'),
+    write('2. 7x7\n'),
+    write('3. 9x9\n').
 
 difficulty(Bot) :-
     get_name(Bot, Name),

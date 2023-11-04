@@ -40,7 +40,20 @@ set_column([X|Rest], Col, Piece, [X|NewRest]) :-
     NextCol is Col - 1,
     set_column(Rest, NextCol, Piece, NewRest).
 
-initialize_cube_position :-
-    assert(cube_position(3,3)). 
+initialize_cube_position(N) :-
+    Pos is N div 2 + 1,
+    assert(cube_position(Pos,Pos)). 
 
+get_player_pieces_positions([Board, Player], Positions) :-
+    length(Board, N),
+    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), (compare_piece(Player,Piece) ; compare_piece(cube,Piece)))), Positions).
 
+get_player_pieces_positions_without_cube([Board, Player], Positions) :-
+    length(Board, N),
+    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), compare_piece(Player,Piece))), Positions).
+
+winner_message(Player) :-
+    get_name(Player, Name),
+    write('****************************************'), nl,
+    write('Congratulations '), write(Name), write('! You won!'), nl,
+    write('****************************************'), nl.
