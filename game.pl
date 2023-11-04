@@ -1,4 +1,3 @@
-:- dynamic last_move/2.
 :- use_module(library(random)).
 
 
