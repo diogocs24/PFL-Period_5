@@ -111,10 +111,12 @@ get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
     get_name(Player, Name),
     write(Name), write(', please enter your move: '), nl,
-    write('Origin Row: '), read_number(Row1),
-    write('Origin Column: '), read_number(Col1),
-    write('Destination Row: '), read_number(Row2),
-    write('Destination Column: '), read_number(Col2),
+    write('----FROM----'), nl,
+    write('Row: '), read_number(Row1),
+    write('Column: '), read_number(Col1),
+    write('----TO----'), nl,
+    write('Row: '), read_number(Row2),
+    write('Column: '), read_number(Col2),
     (valid_move([Board,Player], Col1-Row1, Col2-Row2) ->
         !
     ; 
