@@ -129,7 +129,6 @@ bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     random_member(Col1-Row1-Col2-Row2, Moves),
     draw_bot_move(Player, Col1-Row1-Col2-Row2).
 
-
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
     draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),

@@ -73,3 +73,8 @@ draw_bot_move(Player, Col1-Row1-Col2-Row2) :-
     write('----TO----'), nl,
     write('Row: '), write(Row2), nl,
     write('Column: '), write(Col2), nl.
+
+clear_content :-
+    retractall(get_name(_,_)),
+    retractall(cube_position(_,_)),
+    retractall(bot_diff(_,_)).
