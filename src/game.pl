@@ -81,7 +81,7 @@ check_is_bot([_,Player], Diff) :-
         )
     ).
 
-all_moves_possible([Board, Player], Moves) :-
+valid_moves([Board, Player], Moves) :-
     length(Board, Size),
     get_player_pieces_positions([Board,Player], Positions),
     findall(Col1-Row1-Col2-Row2, (
@@ -91,9 +91,84 @@ all_moves_possible([Board, Player], Moves) :-
         valid_move([Board,Player], Col1-Row1, Col2-Row2)
     ), Moves).
 
+pieces_col_num([Board, Player], Col, Count) :-
+    get_player_pieces_positions([Board, Player], Positions),
+    findall(_, (member(Col-_, Positions), Col =:= Col), CountList),
+    length(CountList, Count).
+
+% pieces_color_num([Board, Player], Color, Count) :-
+%     get_player_pieces_positions([Board, Player], Positions),
+%     count_pieces_in_color(Positions, Color, Count).
+
+% count_pieces_in_color([], _, 0).
+% count_pieces_in_color([Col-Row | Rest], Color, Count) :-
+%     colors_positions(Size, Colors),
+%     nth1(Row, Colors, ColorRow),
+%     nth1(Col, ColorRow, PieceColor),
+%     (PieceColor = Color -> NewCount is Count + 1 ; NewCount is Count),
+%     count_pieces_in_color(Rest, Color, NewCount).
+
+% select_color_with_at_least_two_pieces([Board, Player], SelectedColor) :-
+%     colors_positions(Size, Colors),
+%     select_color_with_at_least_two_pieces([Board, Player], Colors, SelectedColor).
+
+% select_color_with_at_least_two_pieces(_, _, [], _) :- !, fail.
+% select_color_with_at_least_two_pieces([Board, Player], [Color | RestColors], SelectedColor) :-
+%     pieces_color_num([Board, Player], Color, Count),
+%     Count >= 2,
+%     SelectedColor = Color.
+% select_color_with_at_least_two_pieces([Board, Player], [_ | RestColors], SelectedColor) :-
+%     select_color_with_at_least_two_pieces([Board, Player], RestColors, SelectedColor).
+
+select_column_with_at_least_two_pieces([Board, Player], SelectedCol) :-
+    length(Board, Size),
+    select_column_with_at_least_two_pieces([Board, Player], 1, Size, SelectedCol).
+
+select_column_with_at_least_two_pieces(_, _, Col, _, _) :- Col =:= 0, !, fail.
+select_column_with_at_least_two_pieces([Board, Player], Col, _, SelectedCol) :-
+    pieces_col_num([Board, Player], Col, Count),
+    Count >= 2,
+    SelectedCol is Col.
+select_column_with_at_least_two_pieces([Board, Player], Col, Size, SelectedCol) :-
+    NextCol is Col + 1,
+    select_column_with_at_least_two_pieces([Board, Player], NextCol, Size, SelectedCol).
+
+select_downward_move(Moves, Col1-Row1-Col2-Row2) :-
+    findall(Col1-Row1-Col2-Row2, (
+        member(Col1-Row1-Col2-Row2, Moves),
+        Row2 > Row1
+    ), DownwardMoves),
+    random_member(Col1-Row1-Col2-Row2, DownwardMoves).
+
+select_upward_move(Moves, Col1-Row1-Col2-Row2) :-
+    findall(Col1-Row1-Col2-Row2, (
+        member(Col1-Row1-Col2-Row2, Moves),
+        Row2 < Row1
+    ), DownwardMoves),
+    random_member(Col1-Row1-Col2-Row2, DownwardMoves).
+
+
+% select_empty_column([Board, Player], EmptyCol) :-
+%     length(Board, Size),
+%     select_empty_column([Board, Player], 1, Size, EmptyCol).
+
+% select_empty_column(_, _, Col, _, _) :- Col =:= 0, !, fail.
+% select_empty_column([Board, Player], Col, Size, EmptyCol) :-
+%     pieces_col_num([Board, Player], Col, Count),
+%     (Count =:= 0 ->
+%         EmptyCol is Col
+%     ;
+%         NextCol is Col + 1,
+%         select_empty_column([Board, Player], NextCol, Size, EmptyCol)
+%     ).
+
+
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
-    write('Bot is thinking...'), nl,
-    all_moves_possible([Board, Player], Moves),
+    get_name(Player, Name),
+    write('Bot '),
+    write(Name),
+    write(' is thinking...'), nl,
+    valid_moves([Board, Player], Moves),
     random_member(Col1-Row1-Col2-Row2, Moves),
     write('Bot chose: '), nl,
     write('----FROM----'), nl,
@@ -103,9 +178,33 @@ bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     write('Row: '), write(Row2), nl,
     write('Column: '), write(Col2), nl.
 
-% bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
-
-
+bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
+    get_name(Player, Name),
+    write('Bot '),
+    write(Name),
+    write(' is thinking...'), nl,
+    valid_moves([Board, Player], Moves),
+    (pieces_in_all_columns([Board, Player])
+    ->
+        (select_downward_move(Moves, Col1-Row1-Col2-Row2) -> true 
+        ;
+         select_upward_move(Moves, Col1-Row1-Col2-Row2)
+        )
+        ;
+        select_column_with_at_least_two_pieces([Board, Player], SelectedCol),
+        findall(Col1-Row1-Col2-Row2, (
+            member(Col1-Row1-Col2-Row2, Moves),
+            Col1 =:= SelectedCol
+        ), SelectedMoves),
+        random_member(Col1-Row1-Col2-Row2, SelectedMoves)
+    ),
+    write('Bot chose: '), nl,
+    write('----FROM----'), nl,
+    write('Row: '), write(Row1), nl,
+    write('Column: '), write(Col1), nl,
+    write('----TO----'), nl,
+    write('Row: '), write(Row2), nl,
+    write('Column: '), write(Col2), nl.
 
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
