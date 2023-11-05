@@ -28,3 +28,68 @@ Existe algumas regras em termos de movimentação de peças, sendo elas:
 
 ## Lógica do Jogo
 ### Representação interna do estado do jogo
+O GameState é um argumento fundamental em todos os predicados principais da implementação. É formado por um grupo de X elementos:
+ - **Board**, que é uma matriz quadrada de tamanho determinado pelo utilizador. Nela existe células a representar peças ("X", "O" e "+") e células vazias nas posições desocupadas por estas.
+ -
+ -
+ -
+
+#### Estado do jogo inicial (5x5)
+```prolog
+init_state(5, [[
+    [empty,o,empty,empty,empty],
+    [x,empty,o,empty,empty],
+    [empty,x,plus,o,empty],
+    [empty,empty,x,empty,o],
+    [empty,empty,empty,x,empty]
+],playerX]).
+
+colors_positions(5, [
+    [red, white, purple, black, green],
+    [green,red, white, purple, black],
+    [black, green, red, white, purple],
+    [purple, black, green, red, white],
+    [white, purple, black, green, red]
+]).
+```
+![Estado do jogo inicial (5x5)](https://i.imgur.com/a/5CJHcD7)
+
+#### Estado do jogo intermédio (5x5)
+
+```prolog
+init_state(5, [[
+    [empty,o,empty,empty,empty],
+    [x,empty,o,empty,empty],
+    [empty,x,plus,o,empty],
+    [empty,empty,x,empty,o],
+    [empty,empty,empty,x,empty]
+],playerX]).
+
+colors_positions(5, [
+    [red, white, purple, black, green],
+    [green,red, white, purple, black],
+    [black, green, red, white, purple],
+    [purple, black, green, red, white],
+    [white, purple, black, green, red]
+]).
+```
+
+#### Estado do jogo final (5x5)
+```prolog
+init_state(5, [[
+    [empty,o,empty,empty,empty],
+    [x,empty,o,empty,empty],
+    [empty,x,plus,o,empty],
+    [empty,empty,x,empty,o],
+    [empty,empty,empty,x,empty]
+],playerX]).
+
+colors_positions(5, [
+    [red, white, purple, black, green],
+    [green,red, white, purple, black],
+    [black, green, red, white, purple],
+    [purple, black, green, red, white],
+    [white, purple, black, green, red]
+]).
+```
+
