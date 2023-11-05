@@ -96,30 +96,6 @@ pieces_col_num([Board, Player], Col, Count) :-
     findall(_, (member(Col-_, Positions), Col =:= Col), CountList),
     length(CountList, Count).
 
-% pieces_color_num([Board, Player], Color, Count) :-
-%     get_player_pieces_positions([Board, Player], Positions),
-%     count_pieces_in_color(Positions, Color, Count).
-
-% count_pieces_in_color([], _, 0).
-% count_pieces_in_color([Col-Row | Rest], Color, Count) :-
-%     colors_positions(Size, Colors),
-%     nth1(Row, Colors, ColorRow),
-%     nth1(Col, ColorRow, PieceColor),
-%     (PieceColor = Color -> NewCount is Count + 1 ; NewCount is Count),
-%     count_pieces_in_color(Rest, Color, NewCount).
-
-% select_color_with_at_least_two_pieces([Board, Player], SelectedColor) :-
-%     colors_positions(Size, Colors),
-%     select_color_with_at_least_two_pieces([Board, Player], Colors, SelectedColor).
-
-% select_color_with_at_least_two_pieces(_, _, [], _) :- !, fail.
-% select_color_with_at_least_two_pieces([Board, Player], [Color | RestColors], SelectedColor) :-
-%     pieces_color_num([Board, Player], Color, Count),
-%     Count >= 2,
-%     SelectedColor = Color.
-% select_color_with_at_least_two_pieces([Board, Player], [_ | RestColors], SelectedColor) :-
-%     select_color_with_at_least_two_pieces([Board, Player], RestColors, SelectedColor).
-
 select_column_with_at_least_two_pieces([Board, Player], SelectedCol) :-
     length(Board, Size),
     select_column_with_at_least_two_pieces([Board, Player], 1, Size, SelectedCol).
