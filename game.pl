@@ -72,10 +72,10 @@ game_loop(GameState):-
 
 check_is_bot([_,Player], Diff) :-
     bot_diff(Player, Diff),
-    (Diff == random ->
+    (Diff =:= 1 ->
         true
         ;
-        (Diff == greedy ->
+        (Diff =:= 2 ->
             true;
             fail
         )
@@ -91,7 +91,7 @@ all_moves_possible([Board, Player], Moves) :-
         valid_move([Board,Player], Col1-Row1, Col2-Row2)
     ), Moves).
 
-bot_move([Board, Player], Col1-Row1-Col2-Row2, random) :-
+bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     write('Bot is thinking...'), nl,
     all_moves_possible([Board, Player], Moves),
     random_member(Col1-Row1-Col2-Row2, Moves),

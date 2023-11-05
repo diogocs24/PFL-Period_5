@@ -38,11 +38,11 @@ difficulty(Bot) :-
 
 option_difficulty(1, Bot) :-
     write('Random'), nl,
-    asserta(bot_diff(Bot, random)).
+    asserta(bot_diff(Bot, 1)).
 
 option_difficulty(2, Bot) :-
     write('Greedy'), nl,
-    asserta(bot_diff(Bot, greedy)).
+    asserta(bot_diff(Bot, 2)).
 
 option(1) :-   
     write('Enter the name of Bot X (starts playing): '),
