@@ -57,3 +57,19 @@ winner_message(Player) :-
     write('****************************************'), nl,
     write('Congratulations '), write(Name), write('! You won!'), nl,
     write('****************************************'), nl.
+
+draw_bot_thinking(Player) :-
+    get_name(Player, Name),
+    write('Bot '), write(Name), write(' is thinking...'), nl.
+
+draw_bot_move(Player, Col1-Row1-Col2-Row2) :-
+    get_name(Player, Name),
+    write('Bot '),
+    write(Name),
+    write(' chose: '), nl,
+    write('----FROM----'), nl,
+    write('Row: '), write(Row1), nl,
+    write('Column: '), write(Col1), nl,
+    write('----TO----'), nl,
+    write('Row: '), write(Row2), nl,
+    write('Column: '), write(Col2), nl.

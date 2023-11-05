@@ -124,25 +124,14 @@ select_upward_move(Moves, Col1-Row1-Col2-Row2) :-
     random_member(Col1-Row1-Col2-Row2, DownwardMoves).
 
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
-    get_name(Player, Name),
-    write('Bot '),
-    write(Name),
-    write(' is thinking...'), nl,
+    draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),
     random_member(Col1-Row1-Col2-Row2, Moves),
-    write('Bot chose: '), nl,
-    write('----FROM----'), nl,
-    write('Row: '), write(Row1), nl,
-    write('Column: '), write(Col1), nl,
-    write('----TO----'), nl,
-    write('Row: '), write(Row2), nl,
-    write('Column: '), write(Col2), nl.
+    draw_bot_move(Player, Col1-Row1-Col2-Row2).
+
 
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
-    get_name(Player, Name),
-    write('Bot '),
-    write(Name),
-    write(' is thinking...'), nl,
+    draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),
     (pieces_in_all_columns([Board, Player])
     ->
@@ -158,13 +147,7 @@ bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
         ), SelectedMoves),
         random_member(Col1-Row1-Col2-Row2, SelectedMoves)
     ),
-    write('Bot chose: '), nl,
-    write('----FROM----'), nl,
-    write('Row: '), write(Row1), nl,
-    write('Column: '), write(Col1), nl,
-    write('----TO----'), nl,
-    write('Row: '), write(Row2), nl,
-    write('Column: '), write(Col2), nl.
+    draw_bot_move(Player, Col1-Row1-Col2-Row2).
 
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
