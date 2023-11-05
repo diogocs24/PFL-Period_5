@@ -103,7 +103,8 @@ bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     write('Row: '), write(Row2), nl,
     write('Column: '), write(Col2), nl.
 
-% bot_move([Board, Player], Col1-Row1-Col2-Row2, greedy) :-
+% bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
+
 
 
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-

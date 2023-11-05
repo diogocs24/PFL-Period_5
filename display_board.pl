@@ -24,8 +24,8 @@ display_pieces(_, _, Col, Size):-
 display_pieces(Board, Line, Col, Size):-
     get_symbol(Board, Line, Col, Symbol),
     format(' ~a |', [Symbol]),
-    NextCol is Col + 1,
-    display_pieces(Board, Line, NextCol, Size).
+    NCol is Col + 1,
+    display_pieces(Board, Line, NCol, Size).
 
 display_board_rows(_, Line, Size):- 
     Line > Size, nl, !.
@@ -34,14 +34,14 @@ display_board_rows(Board, Line, Size):-
     format('~d|', [Line]),
     display_pieces(Board, Line, 1, Size),
     display_bar(Size),
-    NextLine is Line + 1,
-    display_rows(Board, NextLine, Size), !.
+    NLine is Line + 1,
+    display_rows(Board, NLine, Size), !.
 display_board_rows(Board, Line, Size):-
     format('~d |', [Line]),
     display_pieces(Board, Line, 1, Size),
     display_bar(Size),
-    NextLine is Line + 1,
-    display_rows(Board, NextLine, Size).
+    NLine is Line + 1,
+    display_rows(Board, NLine, Size).
 
 
 display_board_header(Size, Size) :- 
@@ -49,20 +49,20 @@ display_board_header(Size, Size) :-
 display_board_header(1, Max) :- 
     write('\n    1   '), 
     display_header(2, Max), !.
-display_board_header(N, Max) :- 
-    N > 9, 
-    format('~d  ', [N]), 
-    Next is N + 1, 
-    display_header(Next, Max).
-display_board_header(N, Max) :- 
-    format('~d   ', [N]), 
-    Next is N + 1, 
-    display_header(Next, Max).
+display_board_header(X, Max) :- 
+    X > 9, 
+    format('~d  ', [X]), 
+    X is X + 1, 
+    display_header(X, Max).
+display_board_header(X, Max) :- 
+    format('~d   ', [X]), 
+    X is X + 1, 
+    display_header(X, Max).
 
 display_horizontal_bar(0) :-
     write('|\n').
-display_horizontal_bar(N) :-
+display_horizontal_bar(X) :-
     write('|---'),
-    N1 is N - 1,
-    display_horizontal_bar(N1).
+    X1 is X - 1,
+    display_horizontal_bar(X1).
 
