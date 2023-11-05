@@ -109,6 +109,23 @@ select_column_with_at_least_two_pieces([Board, Player], Col, Size, SelectedCol) 
     NextCol is Col + 1,
     select_column_with_at_least_two_pieces([Board, Player], NextCol, Size, SelectedCol).
 
+select_empty_col([Board, Player], EmptyCol) :-
+    length(Board, Size),
+    select_empty_col([Board, Player], 1, Size, EmptyCol).
+
+select_empty_col(_, Col, Col, Col) :- !.
+select_empty_col([Board, Player], Col, _, EmptyCol) :-
+    \+ piece_in_column([Board, Player], Col),
+    EmptyCol is Col.
+select_empty_col([Board, Player], Col, Size, EmptyCol) :-
+    NextCol is Col + 1,
+    select_empty_col([Board, Player], NextCol, Size, EmptyCol).
+
+piece_in_column([Board, Player], Col) :-
+    get_player_pieces_positions([Board, Player], Positions),
+    member(Col-_, Positions).
+
+
 select_downward_move(Moves, Col1-Row1-Col2-Row2) :-
     findall(Col1-Row1-Col2-Row2, (
         member(Col1-Row1-Col2-Row2, Moves),
@@ -123,6 +140,23 @@ select_upward_move(Moves, Col1-Row1-Col2-Row2) :-
     ), DownwardMoves),
     random_member(Col1-Row1-Col2-Row2, DownwardMoves).
 
+select_middle_row(Board, Moves, Col1-Row1-Col2-Row2) :-
+    length(Board, Size),
+    MiddleRow is (Size + 1) // 2,
+    findall(Col1-Row1-Col2-Row2, (
+        member(Col1-Row1-Col2-Row2, Moves),
+        Row2 =:= MiddleRow,
+        Col1 =:= Col2
+    ), MiddleRowMoves),
+    random_member(Col1-Row1-Col2-Row2, MiddleRowMoves).
+
+select_random_col_move(Moves, Col1-Row1-Col2-Row2) :-
+    findall(Col1-Row1-Col2-Row2, (
+        member(Col1-Row1-Col2-Row2, Moves),
+        Col2 =:= Col1
+    ), RandomMoves),
+    random_member(Col1-Row1-Col2-Row2, RandomMoves).
+
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),
@@ -132,19 +166,39 @@ bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
     draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),
-    (pieces_in_all_columns([Board, Player])
-    ->
-        (select_downward_move(Moves, Col1-Row1-Col2-Row2) -> true 
+    (pieces_in_all_columns([Board, Player]) ->
+        (select_middle_row(Board, Moves, Col1-Row1-Col2-Row2) ->
+        true 
         ;
-         select_upward_move(Moves, Col1-Row1-Col2-Row2)
+        (select_upward_move(Moves, Col1-Row1-Col2-Row2)-> true
+        ;
+        (select_downward_move(Moves, Col1-Row1-Col2-Row2) -> true
+        ;
+        select_random_col_move(Moves, Col1-Row1-Col2-Row2)
+        ))
         )
         ;
         select_column_with_at_least_two_pieces([Board, Player], SelectedCol),
-        findall(Col1-Row1-Col2-Row2, (
-            member(Col1-Row1-Col2-Row2, Moves),
-            Col1 =:= SelectedCol
-        ), SelectedMoves),
-        random_member(Col1-Row1-Col2-Row2, SelectedMoves)
+        (select_empty_col([Board, Player], EmptyCol) ->
+            findall(Col1-Row1-Col2-Row2, (
+                member(Col1-Row1-Col2-Row2, Moves),
+                Col1 =:= SelectedCol,
+                Col2 =:= EmptyCol
+            ), SelectedMoves)
+            ;
+            findall(Col1-Row1-Col2-Row2, (
+                member(Col1-Row1-Col2-Row2, Moves),
+                Col1 =:= SelectedCol
+            ), SelectedMoves)
+        ),
+        (random_member(Col1-Row1-Col2-Row2, SelectedMoves)-> true
+        ;
+        (select_middle_row(Board, Moves, Col1-Row1-Col2-Row2)->
+        true
+        ;
+        random_member(Col1-Row1-Col2-Row2, Moves)
+        )
+        )
     ),
     draw_bot_move(Player, Col1-Row1-Col2-Row2).
 
