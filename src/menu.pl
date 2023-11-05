@@ -1,29 +1,35 @@
+% firstMenu(+GameState)
+% Start the initial game menu and set up the game state.
 firstMenu(GameState) :-
     printFirstMenu,
     menuInput,
     read_number(Input),
     option(Input),
-    boardInput,   
+    boardInput,
     read_number(BoardInput),
     board(BoardInput, Size),
     initialize_cube_position(Size),
     init_state(Size, GameState).
 
+% board(+BoardInput, -Size)
+% Set the board size based on the user's choice.
 board(1, Size) :-
     Size is 5.
-
 board(2, Size) :-
     Size is 7.
-
 board(3, Size) :-
     Size is 9.
 
+% boardInput/0
+% Display the board size options.
 boardInput :-
     write('\nChoose board: \n'),
     write('1. 5x5\n'),
     write('2. 7x7\n'),
     write('3. 9x9\n').
 
+% difficulty(+Bot)
+% Set the difficulty level for a bot player.
 difficulty(Bot) :-
     get_name(Bot, Name),
     write('Choose difficulty for '), write(Name), write(': '), nl,
@@ -36,14 +42,17 @@ difficulty(Bot) :-
         difficulty(Bot)
     ).
 
+% option_difficulty(+Input, +Bot)
+% Set the bot's difficulty level based on the user's choice.
 option_difficulty(1, Bot) :-
     write('Random'), nl,
     asserta(bot_diff(Bot, 1)).
-
 option_difficulty(2, Bot) :-
     write('Greedy'), nl,
     asserta(bot_diff(Bot, 2)).
 
+% option(+Input)
+% Handle different user menu options.
 option(1) :-   
     write('Enter the name of Bot X (starts playing): '),
     player_name(playerX),
@@ -51,32 +60,28 @@ option(1) :-
     player_name(playerO),
     difficulty(playerX),
     difficulty(playerO).
-
 option(2) :-
     write('Enter the name of Player X (starts playing): '),
     player_name(playerX),
     write('Enter the name of Bot O: '),
     player_name(playerO),
     difficulty(playerO).
-
 option(3) :-
     write('Enter the name of Player X (starts playing): '),
     player_name(playerX),
     write('Enter the name of Player O: '),
     player_name(playerO).
-
 option(4) :-
     write('\nQuitting...\n\n'),
     abort.
-
-
 option(_Other) :-
     write('\nInvalid Option. Try again:\n\n'),
     menuInput,
     read_number(Input),
     option(Input).
 
-
+% printFirstMenu/0
+% Print the initial game menu.
 printFirstMenu :-
     nl, nl,
     write(' __________________________________________________________________________________ '), nl,
@@ -106,7 +111,7 @@ printFirstMenu :-
     write('|                                                                                  |'), nl,
     write('|__________________________________________________________________________________|'), nl, nl, nl.
 
-
-
+% player_name(+Player)
+% Get user input for menu selection.
 menuInput :-
     write('Choose game mode: ').

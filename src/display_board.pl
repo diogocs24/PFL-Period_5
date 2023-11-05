@@ -1,22 +1,32 @@
 :- use_module(library(lists)).
 
+% print_board(+Board)
+% Prints the board
 print_board(Board) :-
     length(Board, Size),
     print_h(Size),
     r_draw(Board, 1, Size).
 
+% print_h(+Size)
+% Prints the header of the board
 print_h(Size) :-
     h_draw(1, Size),
     b_draw(Size).
 
+% pick_piece(+Board, +Pos, -Piece)
+% Picks the piece at the given position
 pick_piece(Board, Col-Row, Piece) :- 
     nth1(Row, Board, Line),
     nth1(Col, Line, Piece), !.
 
+% symbol(+Piece, -Symbol)
+% Returns the symbol of the given piece
 get_symbol(Board, Line, Col, Symbol):-
     pick_piece(Board,Col-Line,Piece),
     symbol(Piece, Symbol).
 
+% p_draw(+Board, +Line, +Col, +Size)
+% Draws the piece at the given position
 p_draw(_, _, Col, Size):- 
     Col > Size, write('\n  '), !.
 p_draw(Board, Line, Col, Size):-
@@ -25,6 +35,8 @@ p_draw(Board, Line, Col, Size):-
     NextCol is Col + 1,
     p_draw(Board, Line, NextCol, Size).
 
+% r_draw(+Board, +Line, +Size)
+% Draws the board line by line
 r_draw(_, Line, Size):- 
     Line > Size, nl, !.
 r_draw(Board, Line, Size):-
@@ -41,6 +53,8 @@ r_draw(Board, Line, Size):-
     NextLine is Line + 1,
     r_draw(Board, NextLine, Size).
 
+% h_draw(+Size)
+% Draws the header of the board
 h_draw(Size, Size) :- 
     format('~d\n  ', [Size]), !.
 h_draw(1, Max) :- 
@@ -56,6 +70,8 @@ h_draw(N, Max) :-
     Next is N + 1, 
     h_draw(Next, Max).
 
+% b_draw(+Size)
+% Draws the board separator
 b_draw(0) :- 
     write('|\n'), !.
 b_draw(N) :- 

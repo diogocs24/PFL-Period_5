@@ -6,6 +6,8 @@
 :- use_module(library(lists)).
 :- use_module(library(random)).
 
+% play/0
+% Starts the game
 play :-     
       firstMenu(GameState), !,
       game_loop(GameState),

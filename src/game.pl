@@ -1,21 +1,28 @@
 :- use_module(library(random)).
 
-
+% display_game(+Board)
+% Displays the current board and the colors board
 display_game([Board,_]) :-
     length(Board, Size),
     print_board(Board),
     colors_positions(Size, Colors),
     print_board(Colors).
 
+% game_over(+GameState, -Winner)
+% Checks if the game is over and returns the winner
 game_over([Board,Player],Player) :-
     pieces_in_all_columns([Board,Player]),
     pieces_in_all_colors([Board,Player]).
 
+% pieces_in_all_colors(+GameState)
+% Checks if the player has a piece in each color
 pieces_in_all_colors([Board,Player]) :-
     length(Board, Size),
     get_player_pieces_positions([Board,Player], Positions),
     has_piece_in_each_color(Positions, Size).
 
+% has_piece_in_each_color(+Positions, +Size)
+% Checks if the player has a piece in each color
 has_piece_in_each_color(Positions, Size) :-
     colors_positions(Size, Colors),
     findall(Color, (
@@ -27,17 +34,23 @@ has_piece_in_each_color(Positions, Size) :-
     length(UniqueColors, NumColors),
     NumColors =:= Size.
 
+% pieces_in_all_columns(+GameState)
+% Checks if the player has a piece in each column
 pieces_in_all_columns([Board,Player]) :-
     length(Board, Size),
     get_player_pieces_positions([Board,Player], Positions),
     has_piece_in_each_column(Positions, Size).
 
+% has_piece_in_each_column(+Positions, +Size)
+% Checks if the player has a piece in each column
 has_piece_in_each_column(Positions, Size) :-
     findall(Col, (member(Col-_, Positions)), Columns),
     sort(Columns, SortedColumns),
     length(SortedColumns, N),
     N =:= Size.
 
+% has_piece_in_each_color_aux(+Positions, +Size)
+% Checks if the player has a piece in four colors
 has_piece_in_each_color_aux(Positions, Size) :-
     colors_positions(Size, Colors),
     findall(Color, (
@@ -49,12 +62,16 @@ has_piece_in_each_color_aux(Positions, Size) :-
     length(UniqueColors, NumColors),
     NumColors =:= Size - 1.
 
+% has_piece_in_each_column_aux(+Positions, +Size)
+% Checks if the player has a piece in four columns
 has_piece_in_each_column_aux(Positions, Size) :-
     findall(Col, (member(Col-_, Positions)), Columns),
     sort(Columns, SortedColumns),
     length(SortedColumns, N),
     N =:= Size - 1.
 
+% game_loop(+GameState)
+% Main game loop
 game_loop(GameState):-
     display_game(GameState),
     (check_is_bot(GameState, Diff) ->
@@ -70,6 +87,8 @@ game_loop(GameState):-
         game_loop([Board, NextPlayer])
     ).
 
+% check_is_bot(+Player, -Diff)
+% Checks if the player is a bot and returns the bot difficulty
 check_is_bot([_,Player], Diff) :-
     bot_diff(Player, Diff),
     (compare_diff(Diff,1) ->
@@ -81,6 +100,8 @@ check_is_bot([_,Player], Diff) :-
         )
     ).
 
+% valid_moves(+GameState, -Moves)
+% Returns all valid moves for the current player
 valid_moves([Board, Player], Moves) :-
     length(Board, Size),
     get_player_pieces_positions([Board,Player], Positions),
@@ -91,15 +112,18 @@ valid_moves([Board, Player], Moves) :-
         valid_move([Board,Player], Col1-Row1, Col2-Row2)
     ), Moves).
 
+% pieces_col_num(+GameState, +Col, -Count)
+% Returns the number of pieces in a column
 pieces_col_num([Board, Player], Col, Count) :-
     get_player_pieces_positions([Board, Player], Positions),
     findall(_, (member(Col-_, Positions), Col =:= Col), CountList),
     length(CountList, Count).
 
+% select_column_with_at_least_two_pieces(+GameState, -SelectedCol)
+% Selects a column with at least two pieces
 select_column_with_at_least_two_pieces([Board, Player], SelectedCol) :-
     length(Board, Size),
     select_column_with_at_least_two_pieces([Board, Player], 1, Size, SelectedCol).
-
 select_column_with_at_least_two_pieces(_, _, Col, _, _) :- Col =:= 0, !, fail.
 select_column_with_at_least_two_pieces([Board, Player], Col, _, SelectedCol) :-
     pieces_col_num([Board, Player], Col, Count),
@@ -109,10 +133,11 @@ select_column_with_at_least_two_pieces([Board, Player], Col, Size, SelectedCol) 
     NextCol is Col + 1,
     select_column_with_at_least_two_pieces([Board, Player], NextCol, Size, SelectedCol).
 
+% select_empty_col(+GameState, -EmptyCol)
+% Selects an empty column
 select_empty_col([Board, Player], EmptyCol) :-
     length(Board, Size),
     select_empty_col([Board, Player], 1, Size, EmptyCol).
-
 select_empty_col(_, Col, Col, Col) :- !.
 select_empty_col([Board, Player], Col, _, EmptyCol) :-
     \+ piece_in_column([Board, Player], Col),
@@ -121,11 +146,14 @@ select_empty_col([Board, Player], Col, Size, EmptyCol) :-
     NextCol is Col + 1,
     select_empty_col([Board, Player], NextCol, Size, EmptyCol).
 
+% piece_in_column(+GameState, +Col)
+% Checks if the player has a piece in a column
 piece_in_column([Board, Player], Col) :-
     get_player_pieces_positions([Board, Player], Positions),
     member(Col-_, Positions).
 
-
+% select_downward_move(+Moves, -Move)
+% Selects a downward move
 select_downward_move(Moves, Col1-Row1-Col2-Row2) :-
     findall(Col1-Row1-Col2-Row2, (
         member(Col1-Row1-Col2-Row2, Moves),
@@ -133,6 +161,8 @@ select_downward_move(Moves, Col1-Row1-Col2-Row2) :-
     ), DownwardMoves),
     random_member(Col1-Row1-Col2-Row2, DownwardMoves).
 
+% select_upward_move(+Moves, -Move)
+% Selects an upward move
 select_upward_move(Moves, Col1-Row1-Col2-Row2) :-
     findall(Col1-Row1-Col2-Row2, (
         member(Col1-Row1-Col2-Row2, Moves),
@@ -140,6 +170,8 @@ select_upward_move(Moves, Col1-Row1-Col2-Row2) :-
     ), DownwardMoves),
     random_member(Col1-Row1-Col2-Row2, DownwardMoves).
 
+% select_middle_row(+Board, +Moves, -Move)
+% Selects a move in the middle row
 select_middle_row(Board, Moves, Col1-Row1-Col2-Row2) :-
     length(Board, Size),
     MiddleRow is (Size + 1) // 2,
@@ -150,6 +182,8 @@ select_middle_row(Board, Moves, Col1-Row1-Col2-Row2) :-
     ), MiddleRowMoves),
     random_member(Col1-Row1-Col2-Row2, MiddleRowMoves).
 
+% select_random_col_move(+Moves, -Move)
+% Selects a random move in a column
 select_random_col_move(Moves, Col1-Row1-Col2-Row2) :-
     findall(Col1-Row1-Col2-Row2, (
         member(Col1-Row1-Col2-Row2, Moves),
@@ -157,12 +191,13 @@ select_random_col_move(Moves, Col1-Row1-Col2-Row2) :-
     ), RandomMoves),
     random_member(Col1-Row1-Col2-Row2, RandomMoves).
 
+% bot_move(+GameState, -Move, +Diff)
+% Returns a bot move
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),
     random_member(Col1-Row1-Col2-Row2, Moves),
     draw_bot_move(Player, Col1-Row1-Col2-Row2).
-
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
     draw_bot_thinking(Player),
     valid_moves([Board, Player], Moves),
@@ -202,6 +237,8 @@ bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
     ),
     draw_bot_move(Player, Col1-Row1-Col2-Row2).
 
+% get_move(+GameState, -Move)
+% Gets a move from the player
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,
     get_name(Player, Name),
@@ -218,6 +255,8 @@ get_move([Board,Player], Col1-Row1-Col2-Row2) :-
         write('Invalid move. Please try again.'), nl, fail
     ).
 
+% valid_move(+GameState, +Move)
+% Checks if a move is valid
 valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
     inside_board(Board, Col1-Row1),
     inside_board(Board, Col2-Row2),
@@ -231,6 +270,8 @@ valid_move([Board,Player], Col1-Row1, Col2-Row2) :-
         true
     ).
 
+% is_cube_move_valid(+GameState, +Col2-Row2)
+% Checks if a cube move is valid
 is_cube_move_valid([Board, Player], Col2-Row2) :-
     (is_other_player_gonna_win([Board, Player]) ->
         fail;
@@ -243,6 +284,8 @@ is_cube_move_valid([Board, Player], Col2-Row2) :-
         fail
     ).
 
+% is_other_player_gonna_win(+GameState)
+% Checks if the other player is gonna win
 is_other_player_gonna_win([Board, Player]) :-
     length(Board, Size),
     next_player(Player, OtherPlayer),
@@ -250,6 +293,8 @@ is_other_player_gonna_win([Board, Player]) :-
     has_piece_in_each_color_aux(Positions, Size),
     has_piece_in_each_column_aux(Positions, Size).
 
+% pieces_in_path(+GameState, +Col1-Row1, +Col2-Row2)
+% Checks if there are pieces in the path
 pieces_in_path(_, Col1-Row1, Col1-Row1).
 pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
     next_position(Col1-Row1, Col2-Row2, NextPos), 
@@ -257,6 +302,8 @@ pieces_in_path(Board, Col1-Row1, Col2-Row2) :-
     compare_piece(Piece, empty),
     pieces_in_path(Board, NextPos, Col2-Row2).
 
+% next_position(+Col1-Row1, +Col2-Row2, -NextCol-NextRow)
+% Returns the next position
 next_position(Col1-Row1, _-Row2, Col1-NextRow) :- 
     Row1 < Row2,
     NextRow is Row1 + 1.
@@ -270,23 +317,33 @@ next_position(Col1-Row1, Col2-_, NextCol-Row1) :-
     Col1 > Col2,
     NextCol is Col1 - 1.
 
+% inside_board(+GameState, +Col-Row)
+% Checks if a position is inside the board
 inside_board(Board, Col-Row) :-
     length(Board, Size),
     between(1, Size, Col),
     between(1, Size, Row).
 
+% valid_origin(+GameState, +Col-Row)
+% Checks if a position is a valid origin
 valid_origin([Board,Player], Col-Row) :-
     pick_piece(Board, Col-Row, Piece),
     \+compare_piece(empty, Piece),
     (compare_piece(Player, Piece) ; compare_piece(cube,Piece)).
 
+% valid_destination(+GameState, +Col-Row)
+% Checks if a position is a valid destination
 valid_destination(Board, Col2-Row2) :-
     pick_piece(Board, Col2-Row2, Piece),
     compare_piece(Piece, empty).
 
+% make_move(+GameState, +Move, -NewGameState)
+% Makes a move
 make_move([Board,Player], Col1-Row1-Col2-Row2, [NewBoard,Player]) :-
     move_piece(Board, Col1-Row1-Col2-Row2, NewBoard).
 
+% move_piece(+Board, +Col1-Row1-Col2-Row2, -NewBoard)
+% Moves a piece
 move_piece(Board, Col1-Row1-Col2-Row2, NewBoard) :-
     pick_piece(Board, Col1-Row1, Piece),
     (compare_piece(cube, Piece) ->
