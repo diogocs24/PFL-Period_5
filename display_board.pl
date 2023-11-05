@@ -1,15 +1,15 @@
 :- use_module(library(lists)).
 
-% Predicado para imprimir o tabuleiro
-print_board(Board) :-
-    length(Board, Size), % Obtém o tamanho do tabuleiro
-    print_header(Size),
-    display_rows(Board, 1, Size).
 
-% Predicado para imprimir o cabeçalho com números de coluna
-print_header(Size) :-
-    display_header(1, Size),
-    display_bar(Size).
+print_board(Board) :-
+    length(Board, Size), 
+    print_board_header(Size),
+    display_board_rows(Board, 1, Size).
+
+
+print_board_header(Size) :-
+    display_board_header(1, Size),
+    display_horizontal_bar(Size).
 
 pick_piece(Board, Col-Row, Piece) :- 
     nth1(Row, Board, Line),
@@ -27,43 +27,42 @@ display_pieces(Board, Line, Col, Size):-
     NextCol is Col + 1,
     display_pieces(Board, Line, NextCol, Size).
 
-display_rows(_, Line, Size):- 
+display_board_rows(_, Line, Size):- 
     Line > Size, nl, !.
-display_rows(Board, Line, Size):-
+display_board_rows(Board, Line, Size):-
     Line > 9,
     format('~d|', [Line]),
     display_pieces(Board, Line, 1, Size),
     display_bar(Size),
     NextLine is Line + 1,
     display_rows(Board, NextLine, Size), !.
-display_rows(Board, Line, Size):-
+display_board_rows(Board, Line, Size):-
     format('~d |', [Line]),
     display_pieces(Board, Line, 1, Size),
     display_bar(Size),
     NextLine is Line + 1,
     display_rows(Board, NextLine, Size).
 
-% Predicado para imprimir o cabeçalho com números de coluna
-display_header(Size, Size) :- 
+
+display_board_header(Size, Size) :- 
     format('~d\n  ', [Size]), !.
-display_header(1, Max) :- 
+display_board_header(1, Max) :- 
     write('\n    1   '), 
     display_header(2, Max), !.
-display_header(N, Max) :- 
+display_board_header(N, Max) :- 
     N > 9, 
     format('~d  ', [N]), 
     Next is N + 1, 
     display_header(Next, Max).
-display_header(N, Max) :- 
+display_board_header(N, Max) :- 
     format('~d   ', [N]), 
     Next is N + 1, 
     display_header(Next, Max).
 
-% Predicado para imprimir uma barra horizontal
-display_bar(0) :- 
-    write('|\n'), !.
-display_bar(N) :- 
-    write('|---'), 
-    N1 is N - 1, 
-    display_bar(N1).
+display_horizontal_bar(0) :-
+    write('|\n').
+display_horizontal_bar(N) :-
+    write('|---'),
+    N1 is N - 1,
+    display_horizontal_bar(N1).
 
