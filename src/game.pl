@@ -72,10 +72,10 @@ game_loop(GameState):-
 
 check_is_bot([_,Player], Diff) :-
     bot_diff(Player, Diff),
-    (Diff =:= 1 ->
+    (compare_diff(Diff,1) ->
         true
         ;
-        (Diff =:= 2 ->
+        (compare_diff(Diff,2) ->
             true;
             fail
         )
