@@ -123,22 +123,6 @@ select_upward_move(Moves, Col1-Row1-Col2-Row2) :-
     ), DownwardMoves),
     random_member(Col1-Row1-Col2-Row2, DownwardMoves).
 
-
-% select_empty_column([Board, Player], EmptyCol) :-
-%     length(Board, Size),
-%     select_empty_column([Board, Player], 1, Size, EmptyCol).
-
-% select_empty_column(_, _, Col, _, _) :- Col =:= 0, !, fail.
-% select_empty_column([Board, Player], Col, Size, EmptyCol) :-
-%     pieces_col_num([Board, Player], Col, Count),
-%     (Count =:= 0 ->
-%         EmptyCol is Col
-%     ;
-%         NextCol is Col + 1,
-%         select_empty_column([Board, Player], NextCol, Size, EmptyCol)
-%     ).
-
-
 bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
     get_name(Player, Name),
     write('Bot '),
