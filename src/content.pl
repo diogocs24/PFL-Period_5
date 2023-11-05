@@ -9,6 +9,9 @@ compare_piece(playerO, o).
 compare_piece(cube, plus).
 compare_piece(empty, empty).
 
+compare_diff(1,1).
+compare_diff(2,2).
+
 symbol(empty,X) :- X=' '.
 symbol(x,X) :- X='X'.
 symbol(o,X) :- X='O'.

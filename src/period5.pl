@@ -8,6 +8,7 @@
 
 play :-     
       firstMenu(GameState), !,
-      game_loop(GameState).
+      game_loop(GameState),
+      clear_content.
 
       
