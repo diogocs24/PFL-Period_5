@@ -57,7 +57,10 @@ has_piece_in_each_column_aux(Positions, Size) :-
 
 game_loop(GameState):-
     display_game(GameState),
-    get_move(GameState, Move),
+    (check_is_bot(GameState, Diff) ->
+        bot_move(GameState, Move, Diff);
+        get_move(GameState, Move)
+    ),
     make_move(GameState, Move, [Board,Player]), !,
     next_player(Player, NextPlayer),
     (game_over([Board, Player], Winner) ->
@@ -66,6 +69,43 @@ game_loop(GameState):-
     ;
         game_loop([Board, NextPlayer])
     ).
+
+check_is_bot([_,Player], Diff) :-
+    bot_diff(Player, Diff),
+    (Diff =:= 1 ->
+        true
+        ;
+        (Diff =:= 2 ->
+            true;
+            fail
+        )
+    ).
+
+all_moves_possible([Board, Player], Moves) :-
+    length(Board, Size),
+    get_player_pieces_positions([Board,Player], Positions),
+    findall(Col1-Row1-Col2-Row2, (
+        member(Col1-Row1, Positions),
+        between(1, Size, Col2),
+        between(1, Size, Row2),
+        valid_move([Board,Player], Col1-Row1, Col2-Row2)
+    ), Moves).
+
+bot_move([Board, Player], Col1-Row1-Col2-Row2, 1) :-
+    write('Bot is thinking...'), nl,
+    all_moves_possible([Board, Player], Moves),
+    random_member(Col1-Row1-Col2-Row2, Moves),
+    write('Bot chose: '), nl,
+    write('----FROM----'), nl,
+    write('Row: '), write(Row1), nl,
+    write('Column: '), write(Col1), nl,
+    write('----TO----'), nl,
+    write('Row: '), write(Row2), nl,
+    write('Column: '), write(Col2), nl.
+
+% bot_move([Board, Player], Col1-Row1-Col2-Row2, 2) :-
+
+
 
 get_move([Board,Player], Col1-Row1-Col2-Row2) :-
     repeat,

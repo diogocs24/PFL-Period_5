@@ -10,13 +10,13 @@ read_number_aux(X,Acc):-
     read_number_aux(X,Acc1).
 read_number_aux(X,X).
 
-read_cont(Result, Acc):-
-    get_char(Char),
-    Char \= '\n',
-    append(Acc, [Char], Acc1),
-    read_cont(Result, Acc1).
-read_cont(Result, Acc):-
-    atom_chars(Result, Acc).
+read_cont(X, Acc):-
+    get_char(Input),
+    Input \= '\n',
+    append(Acc, [Input], Acc1),
+    read_cont(X, Acc1).
+read_cont(X, Acc):-
+    atom_chars(X, Acc).
 
 player_name(Player):-
     read_cont(Name, []),
