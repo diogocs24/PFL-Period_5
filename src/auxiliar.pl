@@ -41,6 +41,7 @@ set_element([Row|Rest], RowIndex, Col, Piece, [Row|NewRest]) :-
     RowIndex > 1,
     NextRowIndex is RowIndex - 1,
     set_element(Rest, NextRowIndex, Col, Piece, NewRest).
+
 % set_column(+Row, +Col, +Piece, -NewRow)
 % Set a piece on a row at a specific column.
 set_column([], _, _, []).
@@ -54,19 +55,19 @@ set_column([X|Rest], Col, Piece, [X|NewRest]) :-
 % Initialize the position of a cube on the board.
 initialize_cube_position(N) :-
     Pos is N div 2 + 1,
-    assert(cube_position(Pos,Pos)). 
+    assert(cube_position(Pos, Pos)).
 
 % get_player_pieces_positions(+GameState, -Positions)
 % Get the positions of a player's pieces and the cube on the board.
 get_player_pieces_positions([Board, Player], Positions) :-
     length(Board, N),
-    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), (compare_piece(Player,Piece) ; compare_piece(cube,Piece)))), Positions).
+    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), (compare_piece(Player, Piece) ; compare_piece(cube, Piece)))), Positions).
 
 % get_player_pieces_positions_without_cube(+GameState, -Positions)
 % Get the positions of a player's pieces on the board, excluding the cube.
 get_player_pieces_positions_without_cube([Board, Player], Positions) :-
     length(Board, N),
-    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), compare_piece(Player,Piece))), Positions).
+    findall(Col-Row, (between(1, N, Row), between(1, N, Col), (pick_piece(Board, Col-Row, Piece), compare_piece(Player, Piece))), Positions).
 
 % winner_message(+Player)
 % Display a message announcing the winner of the game.
